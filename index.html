@@ -8,7 +8,7 @@
     <title>Meus Filmes</title>
     <link rel="stylesheet" href="styles.css">
 
-    <!-- import icon from font google -->
+    <!-- import icons from google fonts-->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
@@ -21,7 +21,7 @@
         </header>
 
         <button id="add-film" onclick={onOpenModal()}>ADICIONAR FILME</button>
-        
+
         <div id="catalog">
             <table id="films-table">
                 <tr class="table-head">
@@ -29,67 +29,13 @@
                     <th class="name-cell">Diretor</th>
                     <th>Ano de Lançamento</th>
                 </tr>
-                <tr class="table-row">
-                    <td class="name-cell">Os incíveis 1</td>
-                    <td class="name-cell">Um diretor aí</td>
-                    <td class="year-cell">
-                        <div>
-                            2002
-                            <div class="options">
-                                <span class="material-symbols-outlined">
-                                    more_vert
-                                </span>
-                                <ul class="options-menu">
-                                    <li>
-                                        <span class="material-symbols-outlined  icon-menu">
-                                            edit
-                                        </span>
-                                        Editar
-                                    </li>
-                                    <li>
-                                        <span class="material-symbols-outlined  icon-menu">
-                                            delete
-                                        </span>
-                                        Excluir
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="table-row">
-                    <td class="name-cell">Os incíveis 2</td>
-                    <td class="name-cell">Outro diretor aí</td>
-                    <td class="year-cell">
-                        <div>
-                            2020
-                            <div class="options">
-                                <span class="material-symbols-outlined">
-                                    more_vert
-                                </span>
-                                <ul class="options-menu">
-                                    <li>
-                                        <span class="material-symbols-outlined icon-menu">
-                                            edit
-                                        </span>
-                                        Editar
-                                    </li>
-                                    <li>
-                                        <span class="material-symbols-outlined icon-menu">
-                                            delete
-                                        </span>
-                                        Excluir
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
             </table>
         </div>
 
-        <div id="modal-background">
-            MODAL
+        <div id="modal-form" class="modal-background">
+            <div class="modal-content">
+                Modal content
+            </div>
         </div>
     </div>
 
