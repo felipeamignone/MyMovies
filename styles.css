@@ -98,6 +98,10 @@ header {
   margin-right: 4px;
 }
 
+#films-table .empty-row td{
+  text-align: center;
+}
+
 /* MODAL STYLES */
 
 .modal-background {

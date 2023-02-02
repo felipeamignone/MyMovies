@@ -6,7 +6,7 @@ const mock = [
   { id: 4, name: "Os incríveis 5", manager: "Pixar", releasedYear: 2020 },
 ];
 
-localStorage.setItem("catalog", JSON.stringify(mock));
+// localStorage.setItem("catalog", JSON.stringify(mock));
 
 // CATALOG CONTROL
 let table = document.querySelector("#films-table");
@@ -17,6 +17,21 @@ function getFilms() {
 
 function generateRows() {
   let films = getFilms();
+
+  // add empty state to table if no items in storage.
+  if (films.length === 0) {
+    const emptyState = `
+    <tr class="empty-row">
+        <td colspan="3">
+            <h2>Adicione filmes para visualizar aqui.</h2>
+        </td>
+    </tr>
+    `;
+    table.innerHTML += emptyState;
+    return;
+  }
+
+  // generate rows with storage data.
   let rows = "";
   films.forEach((film) => {
     rows += `
@@ -53,7 +68,7 @@ function generateRows() {
 generateRows();
 
 // MODAL CONTROL
-const modalForm = document.querySelector("#modal-form");
+let modalForm = document.querySelector("#modal-form");
 
 function onOpenModal() {
   console.log("abriu modal");
@@ -67,6 +82,6 @@ function onCloseModal() {
 
 window.onclick = function (event) {
   if (event.target == modalForm) {
-    modalForm && (modalForm.style.display = "none");
+    onCloseModal();
   }
 };
