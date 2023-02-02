@@ -24,17 +24,35 @@
 
         <div id="catalog">
             <table id="films-table">
-                <tr class="table-head">
-                    <th class="name-cell">Nome</th>
-                    <th class="name-cell">Diretor</th>
-                    <th>Ano de Lançamento</th>
-                </tr>
+                <thead>
+                    <tr class="table-head">
+                        <th class="name-cell">Nome</th>
+                        <th class="name-cell">Diretor</th>
+                        <th>Ano de Lançamento</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body"></tbody>
             </table>
         </div>
 
         <div id="modal-form" class="modal-background">
             <div class="modal-content">
-                Modal content
+                <form onsubmit="addFilm(event)">
+                    <div id="form-inputs">
+                        <label for="name">Nome do filme:</label>
+                        <input type="text" name="name" id="input-name" />
+
+                        <label for="manager">Diretor do filme:</label>
+                        <input type="text" name="manager" id="input-manager" />
+
+                        <label for="year">Ano de lançamento</label>
+                        <input type="text" name="year" id="input-year" />
+
+                        <button type="submit">
+                            REGISTRAR FILME
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

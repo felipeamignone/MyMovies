@@ -1,15 +1,5 @@
-const mock = [
-  { id: 0, name: "Os incríveis 1", manager: "Pixar", releasedYear: 1973 },
-  { id: 1, name: "Os incríveis 2", manager: "Pixar", releasedYear: 2000 },
-  { id: 2, name: "Os incríveis 3", manager: "Pixar", releasedYear: 2002 },
-  { id: 3, name: "Os incríveis 4", manager: "Pixar", releasedYear: 2005 },
-  { id: 4, name: "Os incríveis 5", manager: "Pixar", releasedYear: 2020 },
-];
-
-// localStorage.setItem("catalog", JSON.stringify(mock));
-
 // CATALOG CONTROL
-let table = document.querySelector("#films-table");
+let tableBody = document.querySelector("#films-table .table-body");
 
 function getFilms() {
   return JSON.parse(localStorage.getItem("catalog")) || [];
@@ -27,7 +17,7 @@ function generateRows() {
         </td>
     </tr>
     `;
-    table.innerHTML += emptyState;
+    tableBody.innerHTML = emptyState;
     return;
   }
 
@@ -44,11 +34,11 @@ function generateRows() {
             <div class="options">
               <span class="material-symbols-outlined">more_vert</span>
               <ul class="options-menu">
-                <li>
+                <li onclick="editFilm(${film.id})">
                   <span class="material-symbols-outlined  icon-menu">edit</span>
                   Editar
                 </li>
-                <li>
+                <li onclick="rmvFilm(${film.id})">
                   <span class="material-symbols-outlined  icon-menu">
                     delete
                   </span>
@@ -62,7 +52,7 @@ function generateRows() {
     `;
   });
 
-  table.innerHTML += rows;
+  tableBody.innerHTML = rows;
 }
 
 generateRows();
@@ -71,12 +61,10 @@ generateRows();
 let modalForm = document.querySelector("#modal-form");
 
 function onOpenModal() {
-  console.log("abriu modal");
   modalForm && (modalForm.style.display = "block");
 }
 
 function onCloseModal() {
-  console.log("fechou modal");
   modalForm && (modalForm.style.display = "none");
 }
 
@@ -85,3 +73,41 @@ window.onclick = function (event) {
     onCloseModal();
   }
 };
+
+// FILMS CONTROL
+function addFilm(e) {
+  e.preventDefault();
+  let films = getFilms();
+
+  const name = e.target.elements.name.value;
+  const manager = e.target.elements.manager.value;
+  const releasedYear = e.target.elements.year.value;
+
+  const newFilme = {
+    id: (Math.random() * 10).toFixed(0),
+    name,
+    manager,
+    releasedYear,
+  };
+
+  films.push(newFilme);
+  localStorage.setItem("catalog", JSON.stringify(films));
+
+  generateRows();
+  onCloseModal();
+}
+
+function editFilm(filmId) {
+  console.log({ filmId });
+}
+
+function rmvFilm(filmId) {
+  console.log({ filmId });
+  let films = getFilms();
+
+  const filmIndex = films.findIndex((film) => film.id === filmId);
+  films.splice(filmIndex, 1);
+  localStorage.setItem("catalog", JSON.stringify(films));
+
+  generateRows();
+}
