@@ -1,20 +1,7 @@
-const mock = [
-  { id: 0, name: "Os incríveis 1", manager: "Pixar", releasedYear: 1973 },
-  { id: 1, name: "Os incríveis 2", manager: "Pixar", releasedYear: 2000 },
-  { id: 2, name: "Os incríveis 3", manager: "Pixar", releasedYear: 2002 },
-  { id: 3, name: "Os incríveis 4", manager: "Pixar", releasedYear: 2005 },
-  { id: 4, name: "Os incríveis 5", manager: "Pixar", releasedYear: 2020 },
-];
-
-// localStorage.setItem("catalog", JSON.stringify(mock));
+let tableBody = document.querySelector("#films-table .table-body");
+let inputYear = document.querySelector("#input-year");
 
 // CATALOG CONTROL
-let table = document.querySelector("#films-table");
-
-function getFilms() {
-  return JSON.parse(localStorage.getItem("catalog")) || [];
-}
-
 function generateRows() {
   let films = getFilms();
 
@@ -27,7 +14,7 @@ function generateRows() {
         </td>
     </tr>
     `;
-    table.innerHTML += emptyState;
+    tableBody.innerHTML = emptyState;
     return;
   }
 
@@ -44,11 +31,11 @@ function generateRows() {
             <div class="options">
               <span class="material-symbols-outlined">more_vert</span>
               <ul class="options-menu">
-                <li>
+                <li onclick="editFilm(${film.id})">
                   <span class="material-symbols-outlined  icon-menu">edit</span>
                   Editar
                 </li>
-                <li>
+                <li onclick="rmvFilm(${film.id})">
                   <span class="material-symbols-outlined  icon-menu">
                     delete
                   </span>
@@ -62,7 +49,7 @@ function generateRows() {
     `;
   });
 
-  table.innerHTML += rows;
+  tableBody.innerHTML = rows;
 }
 
 generateRows();
@@ -71,12 +58,10 @@ generateRows();
 let modalForm = document.querySelector("#modal-form");
 
 function onOpenModal() {
-  console.log("abriu modal");
   modalForm && (modalForm.style.display = "block");
 }
 
 function onCloseModal() {
-  console.log("fechou modal");
   modalForm && (modalForm.style.display = "none");
 }
 
@@ -85,3 +70,70 @@ window.onclick = function (event) {
     onCloseModal();
   }
 };
+
+// FILMS CONTROL
+function getFilms() {
+  return JSON.parse(localStorage.getItem("catalog")) || [];
+}
+
+function setFilms(newFilmList) {
+  localStorage.setItem("catalog", JSON.stringify(newFilmList));
+}
+
+function addFilm(event) {
+  event.preventDefault();
+  let films = getFilms();
+
+  const name = event.target.elements.name.value;
+  const manager = event.target.elements.manager.value;
+  const releasedYear = event.target.elements.year.value;
+
+  // GENERATE A RANDOM ID WITH 4 DIGITS VERIFYING IF EXITES
+  let randomId = (Math.random() * 10000).toFixed(0);
+  function generateNewId(initialValue) {
+    let finalId = initialValue;
+    if (verifyIfExistIdOnCart(initialValue)) {
+      initialValue += 1;
+      return generateNewId(initialValue);
+    }
+    return finalId;
+  }
+
+  const newFilmId = generateNewId(randomId);
+
+  const newFilm = {
+    id: newFilmId,
+    name,
+    manager,
+    releasedYear,
+  };
+
+  films.push(newFilm);
+  setFilms(films);
+
+  generateRows();
+  onCloseModal();
+}
+
+function editFilm(filmId) {
+  console.log({ filmId });
+}
+
+function rmvFilm(filmId) {
+  let films = getFilms();
+
+  const filmIndex = films.findIndex((film) => film.id === String(filmId));
+  films.splice(filmIndex, 1);
+  localStorage.setItem("catalog", JSON.stringify(films));
+
+  generateRows();
+}
+
+// UTILS
+function verifyIfExistIdOnCart(filmId) {
+  let films = getFilms();
+  if (films.some((film) => film.id === filmId)) {
+    return true;
+  }
+  return false;
+}
