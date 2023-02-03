@@ -75,22 +75,35 @@ window.onclick = function (event) {
 };
 
 // FILMS CONTROL
-function addFilm(e) {
-  e.preventDefault();
+function addFilm(event) {
+  event.preventDefault();
   let films = getFilms();
 
-  const name = e.target.elements.name.value;
-  const manager = e.target.elements.manager.value;
-  const releasedYear = e.target.elements.year.value;
+  const name = event.target.elements.name.value;
+  const manager = event.target.elements.manager.value;
+  const releasedYear = event.target.elements.year.value;
 
-  const newFilme = {
-    id: (Math.random() * 10).toFixed(0),
+  // GENERATE A RANDOM ID WITH 4 DIGITS VERIFYING IF EXITES
+  let randomId = (Math.random() * 10000).toFixed(0);
+  function generateNewId(initialValue) {
+    let finalId = initialValue;
+    if (verifyIfExistIdOnCart(initialValue)) {
+      initialValue += 1;
+      return generateNewId(initialValue);
+    }
+    return finalId;
+  }
+
+  const newFilmId = generateNewId(randomId);
+
+  const newFilm = {
+    id: newFilmId,
     name,
     manager,
     releasedYear,
   };
 
-  films.push(newFilme);
+  films.push(newFilm);
   localStorage.setItem("catalog", JSON.stringify(films));
 
   generateRows();
@@ -102,12 +115,22 @@ function editFilm(filmId) {
 }
 
 function rmvFilm(filmId) {
-  console.log({ filmId });
   let films = getFilms();
 
-  const filmIndex = films.findIndex((film) => film.id === filmId);
+  const filmIndex = films.findIndex((film) => film.id === String(filmId));
   films.splice(filmIndex, 1);
   localStorage.setItem("catalog", JSON.stringify(films));
 
   generateRows();
+}
+
+// UTILS
+function onlyNumbersOnInput(event) {}
+
+function verifyIfExistIdOnCart(filmId) {
+  let films = getFilms();
+  if (films.some((film) => film.id === filmId)) {
+    return true;
+  }
+  return false;
 }
