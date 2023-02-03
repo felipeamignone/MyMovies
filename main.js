@@ -1,10 +1,7 @@
-// CATALOG CONTROL
 let tableBody = document.querySelector("#films-table .table-body");
+let inputYear = document.querySelector("#input-year");
 
-function getFilms() {
-  return JSON.parse(localStorage.getItem("catalog")) || [];
-}
-
+// CATALOG CONTROL
 function generateRows() {
   let films = getFilms();
 
@@ -75,6 +72,14 @@ window.onclick = function (event) {
 };
 
 // FILMS CONTROL
+function getFilms() {
+  return JSON.parse(localStorage.getItem("catalog")) || [];
+}
+
+function setFilms(newFilmList) {
+  localStorage.setItem("catalog", JSON.stringify(newFilmList));
+}
+
 function addFilm(event) {
   event.preventDefault();
   let films = getFilms();
@@ -104,7 +109,7 @@ function addFilm(event) {
   };
 
   films.push(newFilm);
-  localStorage.setItem("catalog", JSON.stringify(films));
+  setFilms(films);
 
   generateRows();
   onCloseModal();
@@ -125,8 +130,6 @@ function rmvFilm(filmId) {
 }
 
 // UTILS
-function onlyNumbersOnInput(event) {}
-
 function verifyIfExistIdOnCart(filmId) {
   let films = getFilms();
   if (films.some((film) => film.id === filmId)) {
