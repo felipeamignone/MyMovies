@@ -77,8 +77,16 @@ function onOpenEditFilm(filmId) {
   const inputName = document.querySelector("#input-name");
   const inputManager = document.querySelector("#input-manager");
   const inputYear = document.querySelector("#input-year");
+  const submitButton = document.querySelector("#submit-button");
+  const form = document.querySelector("#film-form");
 
-  const selectedFilm = films.find((film) => film.id === String(filmId));
+  submitButton.innerHTML = "EDITAR FILME";
+
+  form.onsubmit = function (event) {
+    editFilm(filmId, event);
+  };
+
+  const selectedFilm = films.find((film) => film.id == filmId);
 
   inputName.value = selectedFilm.name;
   inputManager.value = selectedFilm.manager;
@@ -138,14 +146,33 @@ function addFilm(event) {
   onCloseModal();
 }
 
-function editFilm(filmId) {
-  console.log({ filmId });
+function editFilm(filmId, event) {
+  event.preventDefault();
+  let films = getFilms();
+
+  const name = event.target.elements.name.value;
+  const manager = event.target.elements.manager.value;
+  const releasedYear = event.target.elements.year.value;
+  const newFilm = {
+    id: filmId,
+    name,
+    manager,
+    releasedYear,
+  };
+
+  const filmIndex = films.findIndex((film) => film.id == filmId);
+  films.splice(filmIndex, 1, newFilm);
+
+  localStorage.setItem("catalog", JSON.stringify(films));
+
+  onCloseModal();
+  generateRows();
 }
 
 function rmvFilm(filmId) {
   let films = getFilms();
 
-  const filmIndex = films.findIndex((film) => film.id === String(filmId));
+  const filmIndex = films.findIndex((film) => film.id == filmId);
   films.splice(filmIndex, 1);
   localStorage.setItem("catalog", JSON.stringify(films));
 
