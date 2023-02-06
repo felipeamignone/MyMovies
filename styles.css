@@ -124,6 +124,14 @@ header {
   padding: 20px;
   border: 1px solid #888;
   width: 60%;
+  position: relative;
+}
+
+.modal-content > span {
+  cursor: pointer;
+  position: absolute;
+  right: 8px;
+  top: 8px;
 }
 
 #form-inputs {
