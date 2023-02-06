@@ -1,9 +1,7 @@
-let tableBody = document.querySelector("#films-table .table-body");
-let inputYear = document.querySelector("#input-year");
-
-// CATALOG CONTROL
+// TABLE CONTROL
 function generateRows() {
-  let films = getFilms();
+  let tableBody = document.querySelector("#films-table .table-body");
+  const films = getFilms();
 
   // add empty state to table if no items in storage.
   if (films.length === 0) {
@@ -31,7 +29,7 @@ function generateRows() {
             <div class="options">
               <span class="material-symbols-outlined">more_vert</span>
               <ul class="options-menu">
-                <li onclick="editFilm(${film.id})">
+                <li onclick="onOpenEditFilm(${film.id})">
                   <span class="material-symbols-outlined  icon-menu">edit</span>
                   Editar
                 </li>
@@ -55,17 +53,50 @@ function generateRows() {
 generateRows();
 
 // MODAL CONTROL
-let modalForm = document.querySelector("#modal-form");
 
 function onOpenModal() {
+  const modalForm = document.querySelector("#modal-form");
   modalForm && (modalForm.style.display = "block");
 }
 
 function onCloseModal() {
+  const modalForm = document.querySelector("#modal-form");
+  const inputName = document.querySelector("#input-name");
+  const inputManager = document.querySelector("#input-manager");
+  const inputYear = document.querySelector("#input-year");
+
+  inputName.value = "";
+  inputManager.value = "";
+  inputYear.value = "";
+
   modalForm && (modalForm.style.display = "none");
 }
 
+function onOpenEditFilm(filmId) {
+  const films = getFilms();
+  const inputName = document.querySelector("#input-name");
+  const inputManager = document.querySelector("#input-manager");
+  const inputYear = document.querySelector("#input-year");
+  const submitButton = document.querySelector("#submit-button");
+  const form = document.querySelector("#film-form");
+
+  submitButton.innerHTML = "EDITAR FILME";
+
+  form.onsubmit = function (event) {
+    editFilm(filmId, event);
+  };
+
+  const selectedFilm = films.find((film) => film.id == filmId);
+
+  inputName.value = selectedFilm.name;
+  inputManager.value = selectedFilm.manager;
+  inputYear.value = selectedFilm.releasedYear;
+
+  onOpenModal();
+}
+
 window.onclick = function (event) {
+  const modalForm = document.querySelector("#modal-form");
   if (event.target == modalForm) {
     onCloseModal();
   }
@@ -88,7 +119,7 @@ function addFilm(event) {
   const manager = event.target.elements.manager.value;
   const releasedYear = event.target.elements.year.value;
 
-  // GENERATE A RANDOM ID WITH 4 DIGITS VERIFYING IF EXITES
+  // GENERATE A RANDOM ID WITH 4 DIGITS VERIFYING IF EXISTS
   let randomId = (Math.random() * 10000).toFixed(0);
   function generateNewId(initialValue) {
     let finalId = initialValue;
@@ -115,14 +146,33 @@ function addFilm(event) {
   onCloseModal();
 }
 
-function editFilm(filmId) {
-  console.log({ filmId });
+function editFilm(filmId, event) {
+  event.preventDefault();
+  let films = getFilms();
+
+  const name = event.target.elements.name.value;
+  const manager = event.target.elements.manager.value;
+  const releasedYear = event.target.elements.year.value;
+  const newFilm = {
+    id: filmId,
+    name,
+    manager,
+    releasedYear,
+  };
+
+  const filmIndex = films.findIndex((film) => film.id == filmId);
+  films.splice(filmIndex, 1, newFilm);
+
+  localStorage.setItem("catalog", JSON.stringify(films));
+
+  onCloseModal();
+  generateRows();
 }
 
 function rmvFilm(filmId) {
   let films = getFilms();
 
-  const filmIndex = films.findIndex((film) => film.id === String(filmId));
+  const filmIndex = films.findIndex((film) => film.id == filmId);
   films.splice(filmIndex, 1);
   localStorage.setItem("catalog", JSON.stringify(films));
 
@@ -132,8 +182,5 @@ function rmvFilm(filmId) {
 // UTILS
 function verifyIfExistIdOnCart(filmId) {
   let films = getFilms();
-  if (films.some((film) => film.id === filmId)) {
-    return true;
-  }
-  return false;
+  return films.some((film) => film.id === filmId);
 }
