@@ -37,6 +37,9 @@
 
         <div id="modal-form" class="modal-background">
             <div class="modal-content">
+                <span class="material-symbols-outlined" onclick={onCloseModal()}>
+                    close
+                </span>
                 <form onsubmit="addFilm(event)" id="film-form">
                     <div id="form-inputs">
                         <label for="name">Nome do filme:</label>
