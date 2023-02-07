@@ -72,6 +72,19 @@ function onCloseModal() {
   modalForm && (modalForm.style.display = "none");
 }
 
+function onOpenAddFilm() {
+  const submitButton = document.querySelector("#submit-button");
+  const form = document.querySelector("#film-form");
+
+  submitButton.innerHTML = "REGISTRAR FILME";
+
+  form.onsubmit = function (event) {
+    addFilm(event);
+  };
+
+  onOpenModal();
+}
+
 function onOpenEditFilm(filmId) {
   const films = getFilms();
   const inputName = document.querySelector("#input-name");
@@ -120,12 +133,12 @@ function addFilm(event) {
   const releasedYear = event.target.elements.year.value;
 
   // GENERATE A RANDOM ID WITH 4 DIGITS VERIFYING IF EXISTS
-  let randomId = (Math.random() * 10000).toFixed(0);
+  const randomId = (Math.random() * 10000).toFixed(0);
   function generateNewId(initialValue) {
     let finalId = initialValue;
-    if (verifyIfExistIdOnCart(initialValue)) {
-      initialValue += 1;
-      return generateNewId(initialValue);
+    if (verifyIfExistIdOnCart(finalId)) {
+      finalId += 1;
+      return generateNewId(finalId);
     }
     return finalId;
   }
